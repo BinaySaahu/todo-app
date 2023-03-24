@@ -1,0 +1,27 @@
+.task{
+    margin-top: 10px;
+    background-color: rgb(49 55 71);
+    color: white;
+    border-radius: 10px;
+}
+.task_content{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0px 8px
+}
+.doneIcon{
+    color: white;
+    cursor: pointer;
+}
+.doneIcon:hover{
+    color: #04c804;
+}
+.deleteIcon{
+    color: white;
+    cursor: pointer;
+    margin-left: 5px;
+}
+.deleteIcon:hover{
+    color: red;
+}

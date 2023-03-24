@@ -1,0 +1,46 @@
+.homepage{
+    height: 100vh;
+    /* width: 100%; */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color:rgb(38 41 49);
+    
+    /* background: url("https://img.freepik.com/free-vector/gradient-ui-ux-background-illustrated_23-2149050183.jpg?w=996&t=st=1676814607~exp=1676815207~hmac=b4c9e1670b3c105a1bc6a74a5802807515c0319e6b3810ba312d94024b5cf8fa"); */
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    
+}
+.homepage_header{
+    position: absolute;
+    top: 0;
+    /* background-color: blueviolet; */
+    width: 100%;
+    text-align: center;
+    color: white;
+}
+.homepage_login_btn{
+    padding: 13px 20px;
+    width: 200px;
+    color: white;
+    background-color: rgb(38 41 49);
+    margin-bottom:20px ;
+    font-weight: 800;
+    border: 1px solid green;
+    border-radius: 20px;
+    cursor:pointer
+
+
+}
+.homepage_register_btn{
+    padding: 10px 20px;
+    width: 200px;
+    background-color: #04c804;
+    border: 1px solid #04c804;
+    color: white;
+    font-weight: 800;
+    border-radius: 20px;
+    cursor:pointer
+
+}
