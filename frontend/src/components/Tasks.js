@@ -2,20 +2,14 @@ import React, { useState } from 'react'
 import './Tasks.css'
 import DoneIcon from '@mui/icons-material/Done';
 import ClearIcon from '@mui/icons-material/Clear';
-import { useCookies } from 'react-cookie';
-import axios from 'axios';
 function Tasks(props) {
-  const[cookies,setCookie,removeCookie] = useCookies(['user']);
   const[doneStatus,setDoneSatus] = useState(false);
-  const userId = cookies.UserId;
   const item = props.item;
   const handleClick = async ()=>{
     console.log(item)
-    
     const indexOfItems = props.items.indexOf(item)
     props.items.splice(indexOfItems,1); 
     setDoneSatus(false);
-    const response = await axios.put("http://localhost:8000/view", {userId,item});
   }
   return (
     <div className='task'>

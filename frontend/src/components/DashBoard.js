@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import "./DashBoard.css";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import Tasks from "./Tasks";
@@ -6,52 +6,69 @@ import { useCookies } from "react-cookie";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import LogoutIcon from "@mui/icons-material/Logout";
+import { UserContext } from "../context/UserContext";
 function DashBoard(props) {
   const [cookies, setCookie, removeCookie] = useCookies(["user"]);
-  const [title, setTitle] = useState(null);
+  const { userDetails, setUserDetails } = useContext(UserContext);
+  const [title, setTitle] = useState("");
   const [items, setItems] = useState([]);
-  const [name, setName] = useState(null);
-  const userId = cookies.UserId;
+  const [name, setName] = useState("");
+  const token = cookies.AuthToken;
   const navigate = useNavigate();
-  useEffect(() => {
-    loadData();
-  }, [items]);
-  const loadData = async () => {
-    try {
-      const response = await axios.get("http://localhost:8000/view", {
-        params: { userId },
-      });
-      const loadItems = response.data.tasks;
-      const UserName = response.data.user_name;
-      setItems(loadItems);
-      setName(UserName);
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
   const handleSubmitTask = async (e) => {
     e.preventDefault();
     const newItem = title;
     const userid = cookies.UserId;
-    // setItems([...items, newItem]);
+    setUserDetails(userDetails.tasks.push(newItem));
+    setItems(userDetails.tasks);
+    console.log(userDetails.tasks);
     try {
-      console.log(userid);
-      const response = await axios.put(`http://localhost:8000/dashboard`, {
+      const response = await axios.put(`http://localhost:8000/dash/dashboard`, {
         newItem,
         userid,
       });
-      // setCookie("AuthToken", response.data.token,{ path: '/' });
-      // setCookie("UserId", response.data.userId,{ path: '/' });
-      const success = response.status === 201;
     } catch (error) {
       console.log(error);
     }
   };
-  const handleLogout = ()=>{
+  const handleLogout = () => {
     navigate("/");
-    removeCookie("user",{path:"/",domain: "localhost"});
-  }
+    removeCookie("AuthToken");
+    removeCookie("UserId");
+  };
+  const loadData = async () => {
+    try {
+      const response = await axios.get(`http://localhost:8000/dash/getdata`, {
+        withCredentials: true,
+        headers: {
+          auth_token: token,
+        },
+      });
+      console.log("Response is:",response)
+      setUserDetails(response.data);
+      console.log("User details:",userDetails.tasks);
+      setItems(userDetails.tasks);
+      console.log("Items are:",items);
+      setName(userDetails.name);
+
+      if (response.status === 200) {
+        props.setIsLoggedin(true);
+      } else {
+        props.setIsLoggedin(false);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+
+  };
+
+  useEffect(() => {
+    
+    loadData();
+    return ()=>{
+      loadData();
+    }
+  });
 
   return (
     <div className="dashboard">
@@ -65,8 +82,8 @@ function DashBoard(props) {
           <AccountCircleIcon />
           <p className="dashboard_navbar_right_p">{name}</p>
           <div className="dashboard_logout_container">
-            <div className="dashboard__logout" onClick = {handleLogout}>
-              <LogoutIcon  />
+            <div className="dashboard__logout" onClick={handleLogout}>
+              <LogoutIcon />
               <p>Logout</p>
             </div>
           </div>
@@ -80,7 +97,7 @@ function DashBoard(props) {
             <button onClick={handleSubmitTask}>Submit</button>
           </div>
           <div className="dashboard_body_container_list">
-            {items.map((item, index) => (
+            {items?.map((item, index) => (
               <Tasks key={index} item={item} items={items} />
             ))}
           </div>

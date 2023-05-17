@@ -19,7 +19,7 @@ function Register(props) {
     const handleSubmit = async (e)=>{
       e.preventDefault();
       try{
-          const response = await axios.post(`http://localhost:8000/signup`,{name,email,password});
+          const response = await axios.post(`http://localhost:8000/auth/signup`,{name,email,password});
           setCookie('AuthToken',response.data.token);
           setCookie('UserId',response.data.userId);
           const success = response.status === 201;
